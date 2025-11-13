@@ -1,2 +1,2 @@
-This is an example \*readme\*.
+This is an example *readme*.
 
