@@ -26,8 +26,8 @@ t = np.arange(len(eda)) / fs # create "time" values in seconds
 plt.figure()
 plt.plot(t, eda)
 plt.title("EDA Signal")
-plt.xlabel("Time [s]")
-plt.ylabel("EDA [µS]")
+plt.xlabel("Time")
+plt.ylabel("EDA")
 plt.show(block=False)
 
 # ToDo : repeat for ECG data
