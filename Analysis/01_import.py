@@ -1,47 +1,73 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
-# File path
-filename = r'P:\Sein_Jeung\Teaching\Project Psychophysiology\Psychophysiology2526\Data\00_source-data\demo_sub-001_addition.txt'
+# This script is for reading in ECG, EDA, EMG data and restructuring them for further processing
+# Files will be read in from Data/00_source-data folder
+# and written in Data/00_raw-data folder
 
-# Count header lines (lines starting with '#') : this is common to all files
-header_lines = 0
-with open(filename, 'r') as f:
-    for line in f:
-        if line.startswith("# EndOfHeader"):
-            header_lines += 1
-            break
-        header_lines += 1
+# count the number of header lines in txt file
+header_lines = 3
 
-# Load the last two columns (EDA and ECG)
-data = np.loadtxt(filename, skiprows=header_lines, usecols=(-2, -1)) # -2, -1 : two last columns
-eda = data[:, 0]
+# where is your data folder?
+dataFolder = r'C:\Users\seinj\Teaching2526\Psychophysiology2526\Data'
 
-# Build a time axis
-fs = 1000  # samples per second
-t = np.arange(len(eda)) / fs # create "time" values in seconds
+# where is your source data?
+sourceFolder = os.path.join(dataFolder, '00_source-data')
+rawFolder = os.path.join(dataFolder, '01_raw-data')
 
-# Plot EDA
-plt.figure()
-plt.plot(t, eda)
-plt.title("EDA Signal")
-plt.xlabel("Time")
-plt.ylabel("EDA")
-plt.show(block=False)
+# create the target folder unless it exists already
+if not os.path.exists(rawFolder):
+    os.makedirs(rawFolder)
 
-# ToDo : repeat for ECG data
+# 1. participants 1 and 2 : ECG and EDA
 
-# Create a DataFrame
-df = pd.DataFrame({
-    'time': t,
-    'eda': eda
-})
+# participants and tasks
+participants = ['sub-001', 'sub-002']
+tasks = ['subtract', 'addition', 'baseline']
 
-# Save to CSV
-output_file = r'P:\Sein_Jeung\Teaching\Project Psychophysiology\Psychophysiology2526\Data\01_raw-data\raw_demo_sub-001_addition.csv'
-df.to_csv(output_file, index=False)  # index=False avoids writing row numbers
+for pts in participants:
+    for tsk in tasks:
+        filename = os.path.join(sourceFolder, 'demo_' + pts + '_' + tsk + '.txt')
 
-print(f"CSV saved to {output_file}")
+        # Load the last two columns (EDA and ECG)
+        data = np.loadtxt(filename, skiprows=header_lines, usecols=(5, 6)) # -2, -1 : two last columns
 
-# ToDo : do this for multiple sessions
+        # Pick only the EDA and ECG
+        eda = data[:, 0]
+        ecg = data[:, 1]
+
+        # Build a time axis
+        fs = 1000  # samples per second
+        t = np.arange(len(eda)) / fs # create "time" values in seconds
+
+        # Plot EDA
+        plt.figure()
+        plt.plot(t, eda)
+        plt.title("EDA Signal")
+        plt.xlabel("Time")
+        plt.ylabel("EDA")
+        plt.show()
+
+        # Plot ECG
+        plt.figure()
+        plt.plot(t, ecg)
+        plt.title("ECG Signal")
+        plt.xlabel("Time")
+        plt.ylabel("ECG")
+        plt.show()
+
+        # Create a DataFrame
+        df = pd.DataFrame({
+            'time': t,
+            'eda': eda,
+            'ecg': ecg
+        })
+
+        # Save to CSV
+        output_file = os.path.join(rawFolder, 'raw_demo-' + pts + '_' + tsk + '.txt')
+        df.to_csv(output_file, index=False)  # index=False avoids writing row numbers
+
+        print(f"CSV saved to {output_file}")
+
