@@ -71,3 +71,42 @@ for pts in participants:
 
         print(f"CSV saved to {output_file}")
 
+# 2. participants 3 and 4 : EMG
+
+# participants and tasks
+participants = ['sub-003', 'sub-004']
+tasks = ['semitandem', 'stand', 'baseline']
+
+for pts in participants:
+    for tsk in tasks:
+        filename = os.path.join(sourceFolder, 'demo_' + pts + '_' + tsk + '.txt')
+
+        # Load the last column (EMG)
+        data = np.loadtxt(filename, skiprows=header_lines, usecols=(-1))
+
+        # Pick only the EDA and ECG
+        emg = data
+
+        # Build a time axis
+        fs = 1000  # samples per second
+        t = np.arange(len(emg)) / fs # create "time" values in seconds
+
+        # Plot EMG
+        plt.figure()
+        plt.plot(t, emg)
+        plt.title("EMG Signal")
+        plt.xlabel("Time")
+        plt.ylabel("EDA")
+        plt.show()
+
+        # Create a DataFrame
+        df = pd.DataFrame({
+            'time': t,
+            'emg': emg
+        })
+
+        # Save to CSV
+        output_file = os.path.join(rawFolder, 'raw_demo-' + pts + '_' + tsk + '.txt')
+        df.to_csv(output_file, index=False)  # index=False avoids writing row numbers
+
+        print(f"CSV saved to {output_file}")
