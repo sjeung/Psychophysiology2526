@@ -41,34 +41,33 @@ ecg_data = (raw_ecg_data/2**(sampling_resolution-1) - 0.5) * vcc * gain
 # process the full time window
 signals_full, info = nk.ecg_process(ecg_data, sampling_rate=1000)
 
-# select segment to plot
-# ecg_signals = signals_full[1:20000]  # .iloc[50000:90000]
-
 plt.figure(figsize=(14, 8))
 
 # 1) Raw signal
 plt.subplot(2, 1, 1)
-plt.plot(ecg_data[1:20000], linewidth=0.8)
+plt.plot(ecg_data[40000:60000], linewidth=0.8)
 plt.title("Raw ECG Signal (Unprocessed)")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 
 # 2) Processed signal (NeuroKit output)
 plt.subplot(2, 1, 2)
-plt.plot(signals_full["ECG_Clean"][:20000], linewidth=0.8)
+plt.plot(signals_full["ECG_Clean"][40000:60000], linewidth=0.8)
 plt.title("Processed ECG Signal (NeuroKit2: filtered + cleaned)")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.tight_layout()
 
 # save figure
-#figures_folder = os.path.join(resultsFolder, 'figures')
-#os.makedirs(figures_folder, exist_ok=True)
-#figure_name = os.path.join(figures_folder, 'processed_ECG_' + pts + '_' + tsk + '.png')
-#plt.savefig(figure_name)
-plt.show()
-
+figures_folder = os.path.join(resultsFolder, 'figures')
+os.makedirs(figures_folder, exist_ok=True)
+figure_name = os.path.join(figures_folder, 'processed_ECG_' + pts + '_' + tsk + '.png')
+plt.savefig(figure_name)
+#plt.show()
 
 # Also show NeuroKit’s built-in ECG diagnostics plot
-#fig = nk.ecg.ecg_plot(signals_full)
+fig = nk.ecg.ecg_plot(signals_full)
+figure_name = os.path.join(figures_folder, 'nk_summary_ECG_' + pts + '_' + tsk + '.png')
+plt.tight_layout()
+plt.savefig(figure_name)
 #plt.show()
