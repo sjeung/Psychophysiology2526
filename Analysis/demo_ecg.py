@@ -29,16 +29,31 @@ filename = os.path.join(rawFolder, 'raw_demo-' + pts + '_' + tsk + '.txt')
 # read in the data in respective conditions
 print('reading in ' + filename)
 subdata = pd.read_csv(filename)
-ecg_data = subdata["ecg"].values
+raw_ecg_data = subdata["ecg"].values
 
 # RAW signal
 plt.figure(figsize=(14, 4))
-plt.plot(ecg_data[:20000], color='gray', label="Raw ECG")  # show first 2000 samples
+plt.plot(raw_ecg_data[:20000], color='gray', label="Raw ECG")  # show first 2000 samples
 plt.title("Raw ECG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
-#plt.show()
+plt.show()
+
+# Apply transfer function
+sampling_resolution = 10
+vcc = 3
+gain = 1
+ecg_data = (raw_ecg_data/2**(sampling_resolution-1) - 0.5) * vcc * gain
+
+# Converted signal
+plt.figure(figsize=(14, 4))
+plt.plot(ecg_data[:20000], color='gray', label="ECG")  # show first 2000 samples
+plt.title("Converted ECG Signal")
+plt.xlabel("Samples")
+plt.ylabel("Amplitude (V)")
+plt.legend()
+plt.show()
 
 # cleaned (filtered)
 ecg_filtered = nk.ecg_clean(ecg_data, sampling_rate=sampling_rate, method="biosppy")
