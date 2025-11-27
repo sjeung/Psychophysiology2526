@@ -30,7 +30,13 @@ filename = os.path.join(rawFolder, 'raw_demo-' + pts + '_' + tsk + '.txt')
 # read in the data in respective conditions
 print('reading in ' + filename)
 subdata = pd.read_csv(filename)
-ecg_data = subdata["ecg"].values
+raw_ecg_data = subdata["ecg"].values
+
+# Apply transfer function (https://support.pluxbiosignals.com/knowledge-base/transfer-functions-converting-digital-sensor-data-into-physical-units/)
+sampling_resolution = 10
+vcc = 3
+gain = 1 # gain on website leads to an unreasonable unit
+ecg_data = (raw_ecg_data/2**(sampling_resolution-1) - 0.5) * vcc * gain
 
 # process the full time window
 signals_full, info = nk.ecg_process(ecg_data, sampling_rate=1000)
@@ -53,10 +59,15 @@ plt.plot(signals_full["ECG_Clean"][:20000], linewidth=0.8)
 plt.title("Processed ECG Signal (NeuroKit2: filtered + cleaned)")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
-
 plt.tight_layout()
-#plt.save("-.png")
+
+# save figure
+#figures_folder = os.path.join(resultsFolder, 'figures')
+#os.makedirs(figures_folder, exist_ok=True)
+#figure_name = os.path.join(figures_folder, 'processed_ECG_' + pts + '_' + tsk + '.png')
+#plt.savefig(figure_name)
 plt.show()
+
 
 # Also show NeuroKit’s built-in ECG diagnostics plot
 #fig = nk.ecg.ecg_plot(signals_full)
