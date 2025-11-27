@@ -15,10 +15,6 @@ dataFolder = r'C:\Users\seinj\Teaching2526\Psychophysiology2526\Data'
 # where is your raw data?
 rawFolder = os.path.join(dataFolder, '01_raw-data')
 
-# where do we save the results?
-resultsFolder = r'C:\Users\seinj\Teaching2526\Psychophysiology2526\Results'
-os.makedirs(resultsFolder, exist_ok=True)
-
 # parameters
 pts = 'sub-001'  # participants = ['sub-001']
 tsk = 'baseline'  # tasks = ['baseline']
