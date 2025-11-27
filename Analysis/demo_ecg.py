@@ -56,22 +56,26 @@ plt.legend()
 plt.show()
 
 # cleaned (filtered)
-ecg_filtered = nk.ecg_clean(ecg_data, sampling_rate=sampling_rate, method="biosppy")
+ecg_filtered = nk.ecg_clean(ecg_data, sampling_rate=sampling_rate, method="neurokit")
+bio_ecg_filtered = nk.ecg_clean(ecg_data, sampling_rate=sampling_rate, method="biosppy")
 
 plt.figure(figsize=(14, 4))
-plt.plot(ecg_data[:20000], color='gray', alpha=0.5, label="Raw ECG")
+#plt.plot(ecg_data[:20000], color='gray', alpha=0.5, label="Raw ECG")
 plt.plot(ecg_filtered[:20000], color='blue', label="Filtered ECG")
+plt.plot(bio_ecg_filtered[:20000], color='green', label="Filtered ECG using biosppy")
 plt.title("Filtered ECG (Noise Removal)")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
-#plt.show()
+plt.show()
 
 # Detect R-peaks
 ecg_peaks_dict = nk.ecg_findpeaks(ecg_filtered, sampling_rate=sampling_rate, method="neurokit")
 
+print(ecg_peaks_dict)
+
 # Extract R-peaks indices
-rpeaks_idx = np.where(ecg_peaks_dict["ECG_R_Peaks"] == 1)[0]
+rpeaks_idx = ecg_peaks_dict["ECG_R_Peaks"]
 
 # Plot
 plt.figure(figsize=(14, 4))
@@ -83,38 +87,4 @@ plt.title("R-peak Detection")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
-#plt.show()
-
-# Example: convert raw ECG to millivolts and remove DC offset
-ecg_converted = (ecg_data - np.mean(ecg_data)) * 1000  # volts → mV, centered
-
-# Clean ECG
-ecg_filtered = nk.ecg_clean(ecg_converted, sampling_rate=sampling_rate, method="neurokit")
-
-# Detect R-peaks
-ecg_peaks = nk.ecg_findpeaks(ecg_filtered, sampling_rate=sampling_rate, method="neurokit")
-rpeaks_idx = np.flatnonzero(ecg_peaks["ECG_R_Peaks"])
-
-# Plot first 20000 samples
-rpeaks_idx_plot = rpeaks_idx[rpeaks_idx < 20000]
-
-plt.figure(figsize=(14, 4))
-plt.plot(ecg_filtered[:20000], color='blue', label="Filtered ECG")
-plt.scatter(rpeaks_idx_plot, ecg_filtered[rpeaks_idx_plot], color='red', label="R-peaks", zorder=5)
-plt.title("R-peak Detection (Converted & Filtered ECG)")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude (mV)")
-plt.legend()
 plt.show()
-
-#ecg_signal = (ecg_signal - np.mean(ecg_signal)) * 1000
-#eda_signal = (eda_signal - np.mean(eda_signal)) * scale
-#emg_signal = np.abs(emg_signal - np.mean(emg_signal))
-
-
-    # ECG: volts → mV, remove DC
-    # signal_converted = (signal_volt - np.mean(signal_volt)) * 1000
-    # EMG: volts → mV, remove DC, full-wave rectification
-   # signal_converted = np.abs(signal_volt - np.mean(signal_volt)) * 1000
-    # EDA: assume 0–2.5 V corresponds to 0–20 µS (example scaling)
-   # signal_converted = (signal_volt - np.mean(signal_volt)) * (20 / adc_range)
