@@ -20,9 +20,10 @@ print(f'Reading {filename}...')
 subdata = pd.read_csv(filename)
 emg_data = subdata["emg"].values
 
-# -------------------------
-# Preprocess EMG
-# -------------------------
+# to do : transfer function https://support.pluxbiosignals.com/wp-content/uploads/2021/11/electromyography-emg-user-manual.pdf
+
+
+
 signals_emg, info_emg = nk.emg_process(emg_data, sampling_rate=1000)
 
 # -------------------------
