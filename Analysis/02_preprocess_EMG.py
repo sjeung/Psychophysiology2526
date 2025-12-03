@@ -55,6 +55,8 @@ for pts in participants:
         # plt.savefig(savepath, dpi=300)
         plt.show()
 
-        # fig = nk.emg_plot(signals_emg)
-        # fig.savefig(os.path.join(resultsFolder, f'EMG_summary_{pts}_{tsk}.png'))
-        # plt.close()
+        if np.any(signals_emg["EMG_Activity"] == 1):
+            nk.emg_plot(signals_emg)
+            plt.show()
+        else:
+            print("No EMG bursts detected — skipping burst visualization.")
