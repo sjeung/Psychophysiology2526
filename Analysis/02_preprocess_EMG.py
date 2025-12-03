@@ -51,12 +51,15 @@ for pts in participants:
         plt.legend()
         plt.tight_layout()
 
-        # Save figure
-        # plt.savefig(savepath, dpi=300)
-        plt.show()
+        # save figure
+        figures_folder = os.path.join(resultsFolder, 'figures')
+        os.makedirs(figures_folder, exist_ok=True)
+        figure_name = os.path.join(figures_folder, 'processed_EMG_' + pts + '_' + tsk + '.png')
+        plt.savefig(figure_name)
 
         if np.any(signals_emg["EMG_Activity"] == 1):
-            nk.emg_plot(signals_emg)
-            plt.show()
+            fig = nk.emg_plot(signals_emg)
+            figure_name = os.path.join(figures_folder, 'nk_summary_EMG_' + pts + '_' + tsk + '.png')
+            plt.savefig(figure_name)
         else:
             print("No EMG bursts detected — skipping burst visualization.")
