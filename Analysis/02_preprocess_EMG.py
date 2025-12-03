@@ -10,48 +10,48 @@ rawFolder = os.path.join(dataFolder, '01_raw-data')
 resultsFolder = r'C:\Users\seinj\Teaching2526\Psychophysiology2526\Results'
 os.makedirs(resultsFolder, exist_ok=True)
 
-pts = 'sub-003'
-tsk = 'baseline'
+participants = ['sub-003', 'sub-004']
+tasks        = ['baseline', 'stand', 'semitandem']
 
-filename = os.path.join(rawFolder, f'raw_demo-{pts}_{tsk}.txt')
-print(f'Reading {filename}...')
+# loop through all fiels
+for pts in participants:
+    for tsk in tasks:
+        filename = os.path.join(rawFolder, f'raw_demo-{pts}_{tsk}.txt')
+        print(f'Reading {filename}...')
 
-# Load data
-subdata = pd.read_csv(filename)
-emg_data = subdata["emg"].values
+        # Load data
+        subdata = pd.read_csv(filename)
+        emg_data_raw = subdata["emg"].values
 
-# to do : transfer function https://support.pluxbiosignals.com/wp-content/uploads/2021/11/electromyography-emg-user-manual.pdf
+        # todo: apply transfer function https://support.pluxbiosignals.com/wp-content/uploads/2021/11/electromyography-emg-user-manual.pdf
+        emg_data = emg_data_raw
 
+        signals_emg, info_emg = nk.emg_process(emg_data, sampling_rate=1000)
 
+        # Plot EMG signals
+        plt.figure(figsize=(14, 8))
 
-signals_emg, info_emg = nk.emg_process(emg_data, sampling_rate=1000)
+        # 1) Raw EMG
+        plt.subplot(2, 1, 1)
+        plt.plot(emg_data[:20000], linewidth=0.8)
+        plt.title(f"Raw EMG Signal ({pts}, {tsk})")
+        plt.xlabel("Samples")
+        plt.ylabel("Amplitude")
 
-# -------------------------
-# Plot EMG signals
-# -------------------------
-plt.figure(figsize=(14, 8))
+        # 2) Processed EMG
+        plt.subplot(2, 1, 2)
+        #plt.plot(signals_emg["EMG_Raw"], linewidth=0.8, label="Raw EMG")
+        plt.plot(signals_emg["EMG_Clean"][:20000], linewidth=0.8, label="Clean EMG")
+        plt.title(f"Processed EMG ({pts}, {tsk})")
+        plt.xlabel("Samples")
+        plt.ylabel("Amplitude")
+        plt.legend()
+        plt.tight_layout()
 
-# 1) Raw EMG
-plt.subplot(2, 1, 1)
-plt.plot(emg_data[:20000], linewidth=0.8)
-plt.title(f"Raw EMG Signal ({pts}, {tsk})")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
+        # Save figure
+        # plt.savefig(savepath, dpi=300)
+        plt.show()
 
-# 2) Processed EMG
-plt.subplot(2, 1, 2)
-#plt.plot(signals_emg["EMG_Raw"], linewidth=0.8, label="Raw EMG")
-plt.plot(signals_emg["EMG_Clean"][:20000], linewidth=0.8, label="Clean EMG")
-plt.title(f"Processed EMG ({pts}, {tsk})")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.legend()
-plt.tight_layout()
-
-# Save figure
-# plt.savefig(savepath, dpi=300)
-plt.show()
-
-# fig = nk.emg_plot(signals_emg)
-# fig.savefig(os.path.join(resultsFolder, f'EMG_summary_{pts}_{tsk}.png'))
-# plt.close()
+        # fig = nk.emg_plot(signals_emg)
+        # fig.savefig(os.path.join(resultsFolder, f'EMG_summary_{pts}_{tsk}.png'))
+        # plt.close()
