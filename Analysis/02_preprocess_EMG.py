@@ -13,7 +13,7 @@ os.makedirs(resultsFolder, exist_ok=True)
 participants = ['sub-003', 'sub-004']
 tasks        = ['baseline', 'stand', 'semitandem']
 
-# loop through all fiels
+# loop through all fields
 for pts in participants:
     for tsk in tasks:
         filename = os.path.join(rawFolder, f'raw_demo-{pts}_{tsk}.txt')
@@ -23,8 +23,11 @@ for pts in participants:
         subdata = pd.read_csv(filename)
         emg_data_raw = subdata["emg"].values
 
-        # todo: apply transfer function https://support.pluxbiosignals.com/wp-content/uploads/2021/11/electromyography-emg-user-manual.pdf
-        emg_data = emg_data_raw
+        # Apply transfer function https://support.pluxbiosignals.com/wp-content/uploads/2021/11/electromyography-emg-user-manual.pdf
+        VCC = 3.3
+        sampling_resolution = 10
+        G = 1009 # sensor gain
+        emg_data = (emg_data_raw/(2**sampling_resolution)-0.5)*VCC*1000/G
 
         signals_emg, info_emg = nk.emg_process(emg_data, sampling_rate=1000)
 
