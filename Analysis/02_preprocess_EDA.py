@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import neurokit2 as nk
+import numpy as np
 
 dataFolder = r'C:\Users\seinj\Teaching2526\Psychophysiology2526\Data'
 rawFolder = os.path.join(dataFolder, '01_raw-data')
@@ -12,6 +13,9 @@ os.makedirs(resultsFolder, exist_ok=True)
 # parameters
 participants = ['sub-001', 'sub-002']
 tasks = ['baseline', 'addition', 'subtract']
+
+# initialize a list for saving all results
+rows = []
 
 for pts in participants:
     for tsk in tasks:
@@ -62,3 +66,19 @@ for pts in participants:
         figure_name = os.path.join(figures_folder, 'nk_summary_EDA_' + pts + '_' + tsk + '.png')
         plt.savefig(figure_name)
 
+        print(signals_eda.keys())
+
+        # extract parameters using built-in analyzer
+        results = nk.eda_analyze(signals_eda)
+
+        # Add identifiers
+        results.insert(0, "Subject", pts)  # 0 = position index
+        results.insert(1, "Session", tsk)  # 1 = position index
+
+        # Store for later
+        rows.append(results)   # store temporarily
+
+df = pd.concat(rows, ignore_index=True)
+outfile = os.path.join(resultsFolder, "EDA_results.csv")
+df.to_csv(outfile, index=False)
+print("Saved:", outfile)
