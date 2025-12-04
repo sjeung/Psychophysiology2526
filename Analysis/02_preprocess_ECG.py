@@ -33,6 +33,32 @@ for pts in participants:
         gain = 1 # gain on website leads to an unreasonable unit
         ecg_data = (raw_ecg_data/2**(sampling_resolution-1) - 0.5) * vcc * gain
 
+        # Remove noisy segments by amplitude
+        amp_threshold_high = 1.8
+        amp_threshold_low = 0.8
+        mask = (ecg_data > amp_threshold_low) & (ecg_data < amp_threshold_high)
+        ecg_data_trimmed = ecg_data[mask]
+
+        # --- Plot both original and cleaned signals ---
+        plt.figure(figsize=(14, 6))
+
+        # Original ECG
+        plt.subplot(2, 1, 1)
+        plt.plot(ecg_data, color='blue', linewidth=0.8)
+        plt.title(f"Original ECG ({pts}, {tsk})")
+        plt.xlabel("Samples")
+        plt.ylabel("Amplitude (V)")
+
+        # Cleaned ECG
+        plt.subplot(2, 1, 2)
+        plt.plot(ecg_data_trimmed, color='green', linewidth=0.8)
+        plt.title(f"Trimmed ECG after amplitude-based removal ({pts}, {tsk})")
+        plt.xlabel("Samples")
+        plt.ylabel("Amplitude (V)")
+
+        plt.tight_layout()
+        plt.show()
+
         # process the full time window
         signals_full, info = nk.ecg_process(ecg_data, sampling_rate=1000)
 

@@ -29,7 +29,7 @@ raw_ecg_data = subdata["ecg"].values
 
 # RAW signal
 plt.figure(figsize=(14, 4))
-plt.plot(raw_ecg_data[:20000], color='gray', label="Raw ECG")  # show first 2000 samples
+plt.plot(raw_ecg_data[:20*sampling_rate], color='gray', label="Raw ECG")  # show first 2000 samples
 plt.title("Raw ECG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
@@ -44,7 +44,7 @@ ecg_data = (raw_ecg_data/2**(sampling_resolution-1) - 0.5) * vcc * gain
 
 # Converted signal
 plt.figure(figsize=(14, 4))
-plt.plot(ecg_data[:20000], color='gray', label="ECG")  # show first 2000 samples
+plt.plot(ecg_data[20*sampling_rate:40*sampling_rate], color='gray', label="ECG")  # show first 2000 samples
 plt.title("Converted ECG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude (V)")

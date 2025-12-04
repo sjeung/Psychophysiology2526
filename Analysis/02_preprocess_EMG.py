@@ -30,6 +30,7 @@ for pts in participants:
         emg_data = (emg_data_raw/(2**sampling_resolution)-0.5)*VCC*1000/G
 
         signals_emg, info_emg = nk.emg_process(emg_data, sampling_rate=1000)
+        print(signals_emg.keys())
 
         # Plot EMG signals
         plt.figure(figsize=(14, 8))
@@ -43,7 +44,6 @@ for pts in participants:
 
         # 2) Processed EMG
         plt.subplot(2, 1, 2)
-        #plt.plot(signals_emg["EMG_Raw"], linewidth=0.8, label="Raw EMG")
         plt.plot(signals_emg["EMG_Clean"][:20000], linewidth=0.8, label="Clean EMG")
         plt.title(f"Processed EMG ({pts}, {tsk})")
         plt.xlabel("Samples")
