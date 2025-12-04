@@ -71,9 +71,15 @@ for pts in participants:
         # extract parameters using built-in analyzer
         results = nk.eda_analyze(signals_eda)
 
+        # compute extra parameter for SCL
+        mean_tonic = np.mean(signals_eda["EDA_Tonic"])
+        mean_phasic = np.mean(signals_eda["EDA_Phasic"])
+
         # Add identifiers
         results.insert(0, "Subject", pts)  # 0 = position index
         results.insert(1, "Session", tsk)  # 1 = position index
+        results.insert(2, "tonic", mean_tonic)
+        results.insert(3, "phasic", mean_phasic)
 
         # Store for later
         rows.append(results)   # store temporarily
