@@ -17,6 +17,9 @@ os.makedirs(resultsFolder, exist_ok=True)
 participants = ['sub-001', 'sub-002']
 tasks = ['baseline', 'addition', 'subtract']
 
+# for saving results
+rows = []
+
 for pts in participants:
     for tsk in tasks:
         # assemble file name
@@ -90,3 +93,23 @@ for pts in participants:
         figure_name = os.path.join(figures_folder, 'nk_summary_ECG_' + pts + '_' + tsk + '.png')
         plt.tight_layout()
         plt.savefig(figure_name)
+        plt.close('all')
+
+        # extract parameters using built-in analyzer
+        results = nk.ecg_analyze(signals_full)
+        print(results.keys())
+
+        # Add identifiers
+        #results["Participant"] = pts
+        #results["Task"] = tsk
+
+        results.insert(0, "Subject", pts)  # 0 = position index
+        results.insert(1, "Session", tsk)  # 1 = position index
+
+        # Store for later
+        rows.append(results)   # store temporarily
+
+df = pd.concat(rows, ignore_index=True)
+outfile = os.path.join(resultsFolder, "ECG_results.csv")
+df.to_csv(outfile, index=False)
+print("Saved:", outfile)
