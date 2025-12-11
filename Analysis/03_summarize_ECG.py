@@ -64,7 +64,7 @@ for feature in key_features:
 
 #  BAR PLOTS WITH NORMALIZED VALUES
 for feature in key_features:
-    plot_data = alldata[alldata["Session"].isin(["Addition", "Subtraction"])]
+    plot_data = alldata[alldata["Session"].isin(["addition", "subtract"])]
     norm_col = feature + "_Norm"
     plt.figure(figsize=(7, 4))
     plt.title(f"{feature} by Session (Normalized to Baseline)")
