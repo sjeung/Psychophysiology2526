@@ -54,7 +54,7 @@ for feature in key_features:
         ].values[0]
 
         # Compute normalized values for ALL that subject's sessions
-        normalized_values = subject_data[feature] / baseline_value
+        normalized_values = subject_data[feature]*100 / baseline_value
 
         # Save back to the main DataFrame
         alldata.loc[subject_data.index, norm_col] = normalized_values
@@ -69,7 +69,7 @@ for feature in key_features:
     plt.figure(figsize=(7, 4))
     plt.title(f"{feature} by Session (Normalized to Baseline)")
     plt.xlabel("Session")
-    plt.ylabel("Normalized Value (Baseline = 1.0)")
+    plt.ylabel("Normalized Value in percentage")
 
     # Bar plot (mean per session)
     sns.barplot(
@@ -89,7 +89,6 @@ for feature in key_features:
         alpha=0.8
     )
 
-    plt.axhline(1.0, color="black", linestyle="--")
     plt.legend(title="Subject", bbox_to_anchor=(1.05, 1), loc="upper left")
     plt.tight_layout()
     plt.show()
