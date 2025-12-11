@@ -76,7 +76,8 @@ for feature in key_features:
         data=plot_data,
         x="Session",
         y=norm_col,
-        color="lightgray"
+        color="lightgray",
+        width=0.3
     )
 
     # Dot plot (each subject)
@@ -91,4 +92,8 @@ for feature in key_features:
 
     plt.legend(title="Subject", bbox_to_anchor=(1.05, 1), loc="upper left")
     plt.tight_layout()
+    if feature == "HRV_RMSSD":
+        plt.ylim(60, 360)
+    else:
+        plt.ylim(60, 120)
     plt.show()
