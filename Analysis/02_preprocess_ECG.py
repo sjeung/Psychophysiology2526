@@ -63,13 +63,13 @@ for pts in participants:
         plt.show()
 
         # process the full time window
-        signals_full, info = nk.ecg_process(ecg_data, sampling_rate=1000)
+        signals_full, info = nk.ecg_process(ecg_data_trimmed, sampling_rate=1000)
 
         plt.figure(figsize=(14, 8))
 
         # 1) Raw signal
         plt.subplot(2, 1, 1)
-        plt.plot(ecg_data[40000:60000], linewidth=0.8)
+        plt.plot(ecg_data_trimmed[40000:60000], linewidth=0.8)
         plt.title("Raw ECG Signal (Unprocessed)")
         plt.xlabel("Samples")
         plt.ylabel("Amplitude")
@@ -100,9 +100,6 @@ for pts in participants:
         print(results.keys())
 
         # Add identifiers
-        #results["Participant"] = pts
-        #results["Task"] = tsk
-
         results.insert(0, "Subject", pts)  # 0 = position index
         results.insert(1, "Session", tsk)  # 1 = position index
 
