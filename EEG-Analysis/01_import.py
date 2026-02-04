@@ -22,7 +22,8 @@ raw = read_raw_bids(
     bids_path=bids_path
 )
 
-print(raw)
+#print(raw)
+print(raw.info)
 
 # Drop last 3 channels (these are IMUs)
 #last3 = raw.ch_names[-3:]
@@ -36,4 +37,5 @@ raw.plot(
     block=True         # keep the window open (important in scripts)
 )
 
-raw.save(f"{raw_folder}/sub-{sub}_ses-{ses}_raw.fif", overwrite=True)
+save_path = os.path.join(raw_folder, f"sub-{sub}_ses-{ses}_raw.fif")
+raw.save(save_path, overwrite=True)
