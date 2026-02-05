@@ -6,36 +6,40 @@ bids_root = r"P:\Sein_Jeung\Teaching\Project Psychophysiology\Psychophysiology25
 raw_folder = r"P:\Sein_Jeung\Teaching\Project Psychophysiology\Psychophysiology2526\EEG-Data\01_raw-data"
 os.makedirs(raw_folder, exist_ok=True)
 
-sub = "001"
-ses = "oddballstand"
+subjects = ["001","002"]
+sessions = ["stand","oddballwalk","oddballstand"]
 
-bids_path = BIDSPath(
-    subject=sub,
-    session=ses,
-    task="Oddball",
-    datatype="eeg",
-    root=bids_root
-)
+# loopify
+for sub in subjects:
+    for ses in sessions:
+        print(f"Loading sub-{sub}, session-{ses}")
 
-# Read the data
-raw = read_raw_bids(
-    bids_path=bids_path
-)
+        bids_path = BIDSPath(
+            subject=sub,
+            session=ses,
+            task="Oddball",
+            datatype="eeg",
+            root=bids_root
+        )
 
-#print(raw)
-print(raw.info)
+        # Read the data
+        raw = read_raw_bids(
+            bids_path=bids_path
+        )
 
-# Drop last 3 channels (these are IMUs)
-#last3 = raw.ch_names[-3:]
-#print(f"Dropping channels: {last3}")
-#raw.drop_channels(last3)
+        print(raw.info)
 
-raw.plot(
-    n_channels=10,     # how many channels to show at once
-    scalings="auto",   # automatic scaling per channel type
-    duration=10,       # seconds per window
-    block=True         # keep the window open (important in scripts)
-)
+        # Drop last 3 channels (these are IMUs)
+        last3 = raw.ch_names[-3:]
+        print(f"Dropping channels: {last3}")
+        raw.drop_channels(last3)
 
-save_path = os.path.join(raw_folder, f"sub-{sub}_ses-{ses}_raw.fif")
-raw.save(save_path, overwrite=True)
+        raw.plot(
+            n_channels=10,     # how many channels to show at once
+            scalings="auto",   # automatic scaling per channel type
+            duration=10,       # seconds per window
+            block=True         # keep the window open (important in scripts)
+        )
+
+        save_path = os.path.join(raw_folder, f"sub-{sub}_ses-{ses}_raw.fif")
+        raw.save(save_path, overwrite=True)
