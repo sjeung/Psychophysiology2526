@@ -8,32 +8,35 @@ os.makedirs(preprocessed_folder, exist_ok=True)
 # parameters
 l_freq, h_freq = 0.1, 30
 resample_sfreq = 250
-sub = "001"
-ses = "oddballstand"
 
-# for sub in subjects:
-#    for ses in sessions:
-#        print(f"Loading sub-{sub}, session-{ses}")
+# loopify
+subjects = ["001", "002"]
+sessions = ["stand", "oddballwalk", "oddballstand"]
 
-raw_path = os.path.join(raw_folder, f"sub-{sub}_ses-{ses}_raw.fif")
-raw = mne.io.read_raw_fif(raw_path, preload=True)
+for sub in subjects:
+    for ses in sessions:
+        print(f"Loading sub-{sub}, session-{ses}")
 
-# unprocessed
-raw.plot(n_channels=20, duration=10, block=True)
+        raw_path = os.path.join(raw_folder, f"sub-{sub}_ses-{ses}_raw.fif")
+        raw = mne.io.read_raw_fif(raw_path, preload=True)
 
-# power spectral density
-raw.plot_psd(fmax=80)
+        # power spectral density
+        fig = raw.plot_psd(fmax=80)
 
-# average referencing
-raw.set_eeg_reference("average")
+        # average referencing
+        raw.set_eeg_reference("average")
 
-# filtering & resampling
-raw.filter(l_freq, h_freq)
-raw.resample(resample_sfreq)
+        # filtering & resampling
+        raw.filter(l_freq, h_freq)
+        raw.resample(resample_sfreq)
 
-# now preprocessed
-raw.plot(n_channels=20, duration=10, block=True)
+        # now preprocessed (optional for inspection)
+        raw.plot(n_channels=20, duration=10, block=True)
 
-# save output
-save_path = os.path.join(preprocessed_folder, f"sub-{sub}_ses-{ses}_preprocessed.fif")
-raw.save(save_path, overwrite=True)
+        # save output
+        save_path = os.path.join(preprocessed_folder, f"sub-{sub}_ses-{ses}_preprocessed.fif")
+        raw.save(save_path, overwrite=True)
+
+        # save psd figure
+        fig_path = os.path.join(preprocessed_folder, f"sub-{sub}_ses-{ses}_psd.png")
+        fig.savefig(fig_path)
