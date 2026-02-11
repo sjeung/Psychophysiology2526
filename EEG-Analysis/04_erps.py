@@ -49,7 +49,7 @@ for ses in sessions:
     diff_trials_dict[ses] = evokeds_diff_trials
 
 # Plot difference waves between sessions
-f = mne.viz.plot_compare_evokeds(
+figs = mne.viz.plot_compare_evokeds(
     diff_trials_dict,
     picks=picks,
     combine=None,
@@ -59,4 +59,6 @@ f = mne.viz.plot_compare_evokeds(
     show=True
 )
 
-f.savefig(os.path.join(epoched_folder, f"diff_ERP.png"), dpi = 300)
+# figs is a list of Figure objects for some reason ...
+for i, fig in enumerate(figs):
+    fig.savefig(os.path.join(epoched_folder, f"diff_ERP_{i}.png"), dpi=300)
