@@ -52,7 +52,7 @@ for ses in sessions:
 figs = mne.viz.plot_compare_evokeds(
     diff_trials_dict,
     picks=picks,
-    combine=None,
+    combine="mean",
     ci=True,
     colors={"oddballstand": "green", "oddballwalk": "red"},
     title="Target - Standard: Walking vs Standing",
