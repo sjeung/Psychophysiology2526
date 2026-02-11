@@ -1,6 +1,7 @@
 import re
 import os
 import mne
+import pandas as pd
 from mne import Annotations
 
 # Paths
@@ -87,3 +88,12 @@ for ses in sessions:
     # save epoched data
     epoched_path = os.path.join(epoched_folder, f"sub-001_ses-{ses}_epoched.fif")
     epochs.save(epoched_path, overwrite=True)
+
+    #save behavioural data
+    behav_df = pd.DataFrame({
+        "standard_onset_sec": pd.Series(standard_onsets),
+        "target_onset_sec": pd.Series(target_onsets),
+        "response_onset_sec": pd.Series(response_onsets),
+    })
+
+    behav_df.to_csv(os.path.join(epoched_folder, f"sub-001_ses-{ses}_onsets.csv"),index=False)
