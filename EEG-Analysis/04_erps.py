@@ -26,6 +26,8 @@ evoked_standard.plot(spatial_colors=True)
 evoked_standard.plot_topomap(times=[-0.2, 0.1, 0.4], average=0.05)
 
 # summary plot
+picks = ["Fz", "Cz"] # for auditory processing and mismatch negativity ["Cz", "Pz"] for P300 in target condition
+
 #evokeds = dict(
 #    standard=list(epochs["standard"].iter_evoked()),
 #    target=list(epochs["target"].iter_evoked()),
