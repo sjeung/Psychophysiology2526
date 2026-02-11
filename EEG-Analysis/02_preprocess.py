@@ -20,6 +20,9 @@ for sub in subjects:
         raw_path = os.path.join(raw_folder, f"sub-{sub}_ses-{ses}_raw.fif")
         raw = mne.io.read_raw_fif(raw_path, preload=True)
 
+        # remove prefix from bv rda
+        raw.rename_channels(lambda x: x.replace("BrainVision RDA_", ""))
+
         # power spectral density
         fig = raw.plot_psd(fmax=80)
 
