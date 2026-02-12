@@ -42,3 +42,10 @@ EEG data was transmitted via bluetooth to the recording PC and interfaced with t
 **Recording device**
 - Device : MSI laptop (spec ...)
 - Software : LabStreamingLayer (version ...)
+
+****Recommended papers****
+------------------------
+Polich, 2007, An integrative theory of P3a and P3b [Link](https://www.sciencedirect.com/science/article/pii/S1388245707001897)
+Näätänen et al., 1989, Do event-related potentials reveal the mechanism of the auditory sensory memory in the human brain? [Link](https://www.sciencedirect.com/science/article/pii/0304394089905132?via%3Dihub)
+Garrido et al., 2009, The mismatch negativity: A review of underlying mechanisms [Link](https://www.sciencedirect.com/science/article/pii/S1388245708012686#bibliography0005)
+Grasso-Cladera et al., 2024, A systematic reveiw of mobile brain/body imaging studies using the P300 event-related potentials ... [Link](https://link.springer.com/article/10.3758/s13415-024-01190-z)
