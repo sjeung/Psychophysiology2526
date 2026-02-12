@@ -3,7 +3,7 @@ The scripts are created for educational purpose to familiarize students with dat
 
 ****EEG data set****
 ------------------------
-**Overview**
+**Overview**    
 This dataset contains continuous electroencephalography (EEG) and events data acquired during an auditory oddball task. 
 The data were collected to investigate neural and behavioral dynamics during locomotion under controlled experimental conditions.
 
